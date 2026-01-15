@@ -1,0 +1,152 @@
+{
+	"info": {
+		"_postman_id": "2257e266-0b88-4cea-9938-282714099ef9",
+		"name": "APITestAuto",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "New Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "338077dd-7415-409f-8c1a-2e94e73b4d73",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is an array\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.be.an(\"array\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"First post has required fields\", function () {\r",
+							"    var post = pm.response.json()[0];\r",
+							"    pm.expect(post).to.have.property(\"userId\");\r",
+							"    pm.expect(post).to.have.property(\"id\");\r",
+							"    pm.expect(post).to.have.property(\"title\");\r",
+							"    pm.expect(post).to.have.property(\"body\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "7eed9b34-7273-4c02-95f3-ac04f1db90c2",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseURL}}/post"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "fb7fd3f9-cca1-4a6d-aea9-8b41c9898ed4",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.environment.set(\"token\", jsonData.token);\r",
+							"\r",
+							"pm.test(\"Token is generated\", function () {\r",
+							"    pm.expect(jsonData.token).to.not.be.undefined;\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "de7ab6a9-a8d3-4cd2-b3d7-dd21150d5f5f",
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "c2ed3752-9f8d-4533-8853-2980dd9cf37e",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"password123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{baseURL}}/auth"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Booking",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e8fad0f5-0e18-480c-b41a-21e6936d2190",
+						"exec": [
+							"pm.test(\"Booking created successfully\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var responseData = pm.response.json();\r",
+							"pm.environment.set(\"bookingId\", responseData.bookingid);\r",
+							"\r",
+							"pm.test(\"Booking ID is stored\", function () {\r",
+							"    pm.expect(pm.environment.get(\"bookingId\")).to.not.be.null;\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "10d44625-3202-4dd3-a174-cc4f2b442677",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "{{baseURL}}/booking"
+			},
+			"response": []
+		}
+	]
+}
