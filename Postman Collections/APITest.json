@@ -160,12 +160,33 @@
 		},
 		{
 			"name": "Update Booking",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "dd29edd8-de8b-4cf1-9a70-8418c9e4d50d",
+						"exec": [
+							"pm.test(\"Booking updated\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var data = pm.response.json();\r",
+							"pm.test(\"First name updated\", function () {\r",
+							"    pm.expect(data.firstname).to.eql(\"Michael\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
 			"id": "da212890-5f9b-46c8-9243-2d2ae12c32e5",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
 			"request": {
-				"method": "GET",
+				"method": "PUT",
 				"header": [
 					{
 						"key": "Content-Type",
