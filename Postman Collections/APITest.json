@@ -45,7 +45,7 @@
 			"response": []
 		},
 		{
-			"name": "Create Token",
+			"name": "Auth",
 			"event": [
 				{
 					"listen": "test",
