@@ -6,7 +6,7 @@
 	},
 	"item": [
 		{
-			"name": "New Request",
+			"name": "Get Booking",
 			"event": [
 				{
 					"listen": "test",
@@ -145,6 +145,30 @@
 				"method": "POST",
 				"header": [],
 				"url": "{{baseURL}}/booking"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Booking",
+			"id": "da212890-5f9b-46c8-9243-2d2ae12c32e5",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Booking",
+			"id": "14c05fdd-074f-41ab-aadf-c82fd1255f93",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": []
 			},
 			"response": []
 		}
