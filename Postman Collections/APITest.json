@@ -17,17 +17,10 @@
 							"    pm.response.to.have.status(200);\r",
 							"});\r",
 							"\r",
-							"pm.test(\"Response is an array\", function () {\r",
-							"    var jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData).to.be.an(\"array\");\r",
-							"});\r",
+							"var data = pm.response.json();\r",
 							"\r",
-							"pm.test(\"First post has required fields\", function () {\r",
-							"    var post = pm.response.json()[0];\r",
-							"    pm.expect(post).to.have.property(\"userId\");\r",
-							"    pm.expect(post).to.have.property(\"id\");\r",
-							"    pm.expect(post).to.have.property(\"title\");\r",
-							"    pm.expect(post).to.have.property(\"body\");\r",
+							"pm.test(\"Validate first name\", function () {\r",
+							"    pm.expect(data.firstname).to.eql(\"John\");\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -43,7 +36,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": "{{baseURL}}/post"
+				"url": "{{baseURL}}/booking/{{bookingId}}"
 			},
 			"response": []
 		},
