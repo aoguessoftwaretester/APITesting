@@ -21,6 +21,10 @@
 							"\r",
 							"pm.test(\"First name matches created booking\", function () {\r",
 							"    pm.expect(data.firstname).to.eql(pm.environment.get(\"firstName\"));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Booking ID exists\", function () {\r",
+							"    pm.expect(pm.environment.get(\"bookingId\")).to.not.be.undefined;\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -187,7 +191,11 @@
 			},
 			"request": {
 				"auth": {
-					"type": "noauth"
+					"type": "basic",
+					"basic": {
+						"password": "password123",
+						"username": "admin"
+					}
 				},
 				"method": "PUT",
 				"header": [
