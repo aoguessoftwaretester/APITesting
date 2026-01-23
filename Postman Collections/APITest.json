@@ -201,13 +201,12 @@
 					"script": {
 						"id": "dd29edd8-de8b-4cf1-9a70-8418c9e4d50d",
 						"exec": [
-							"pm.test(\"Booking updated\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});\r",
-							"\r",
-							"var data = pm.response.json();\r",
-							"pm.test(\"First name updated\", function () {\r",
-							"    pm.expect(data.firstname).to.eql(\"Michael\");\r",
+							"pm.test(\"Status code is 403 Forbidden\", function () {",
+							"    pm.expect(pm.response.code).to.eql(403);",
+							"});",
+							"",
+							"pm.test(\"Check if the response body contains 'Forbidden'\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"Forbidden\");",
 							"});"
 						],
 						"type": "text/javascript",
@@ -222,10 +221,9 @@
 			},
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": {
-						"password": "password123",
-						"username": "admin"
+					"type": "bearer",
+					"bearer": {
+						"token": "{{ExpiredToken}}"
 					}
 				},
 				"method": "PUT",
@@ -236,8 +234,8 @@
 						"type": "text"
 					},
 					{
-						"key": "Cookie",
-						"value": "token={{token}}",
+						"key": "Authorization",
+						"value": "Bearer {{ExpiredToken}}",
 						"type": "text"
 					}
 				],
