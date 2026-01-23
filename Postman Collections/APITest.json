@@ -6,7 +6,7 @@
 	},
 	"item": [
 		{
-			"name": "Auth",
+			"name": "Request Auth Token",
 			"event": [
 				{
 					"listen": "test",
@@ -194,7 +194,7 @@
 			"response": []
 		},
 		{
-			"name": "Update Booking",
+			"name": "Update Booking with Invalid Token",
 			"event": [
 				{
 					"listen": "test",
@@ -216,7 +216,7 @@
 					}
 				}
 			],
-			"id": "da212890-5f9b-46c8-9243-2d2ae12c32e5",
+			"id": "f117c9cc-e2bf-4588-95b9-2b8ec02df9b6",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -255,7 +255,7 @@
 			"response": []
 		},
 		{
-			"name": "Update Booking with Invalid Token",
+			"name": "Update Booking with Valid Token",
 			"event": [
 				{
 					"listen": "test",
@@ -277,7 +277,7 @@
 					}
 				}
 			],
-			"id": "f117c9cc-e2bf-4588-95b9-2b8ec02df9b6",
+			"id": "da212890-5f9b-46c8-9243-2d2ae12c32e5",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
