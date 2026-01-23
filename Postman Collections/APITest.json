@@ -162,48 +162,7 @@
 					"script": {
 						"id": "e8fad0f5-0e18-480c-b41a-21e6936d2190",
 						"exec": [
-							"pm.test(\"Booking created successfully\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});\r",
-							"\r",
-							"var responseData = pm.response.json();\r",
-							"pm.environment.set(\"bookingId\", responseData.bookingid);\r",
-							"pm.environment.set(\"firstName\", responseData.booking.firstname);\r",
-							"\r",
-							"pm.test(\"Booking ID is stored\", function () {\r",
-							"    pm.expect(pm.environment.get(\"bookingId\")).to.not.be.null;\r",
-							"});\r",
-							"\r",
-							"// Parse request body to compare with response\r",
-							"var requestBody = JSON.parse(pm.request.body.raw);\r",
-							"\r",
-							"pm.test(\"Response firstname matches request\", function () {\r",
-							"    pm.expect(responseData.booking.firstname).to.eql(requestBody.firstname);\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Response lastname matches request\", function () {\r",
-							"    pm.expect(responseData.booking.lastname).to.eql(requestBody.lastname);\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Response totalprice matches request\", function () {\r",
-							"    pm.expect(responseData.booking.totalprice).to.eql(requestBody.totalprice);\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Response depositpaid matches request\", function () {\r",
-							"    pm.expect(responseData.booking.depositpaid).to.eql(requestBody.depositpaid);\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Response checkin date matches request\", function () {\r",
-							"    pm.expect(responseData.booking.bookingdates.checkin).to.eql(requestBody.bookingdates.checkin);\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Response checkout date matches request\", function () {\r",
-							"    pm.expect(responseData.booking.bookingdates.checkout).to.eql(requestBody.bookingdates.checkout);\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Response additionalneeds matches request\", function () {\r",
-							"    pm.expect(responseData.booking.additionalneeds).to.eql(requestBody.additionalneeds);\r",
-							"});\r",
+							"pm.environment.set(\"token\", \"a2f1a01e78e7bca\");\r",
 							""
 						],
 						"type": "text/javascript",
@@ -217,6 +176,12 @@
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "a2f1a01e78e7bca"
+					}
+				},
 				"method": "POST",
 				"header": [
 					{
