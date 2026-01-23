@@ -162,7 +162,7 @@
 					"script": {
 						"id": "e8fad0f5-0e18-480c-b41a-21e6936d2190",
 						"exec": [
-							"pm.environment.set(\"ExpiredToken\", \"a2f1a01e78e7bca\");\r",
+							"//pm.environment.set(\"ExpiredToken\", \"a2f1a01e78e7bca\");\r",
 							""
 						],
 						"type": "text/javascript",
@@ -179,7 +179,7 @@
 				"auth": {
 					"type": "bearer",
 					"bearer": {
-						"token": "a2f1a01e78e7bca"
+						"token": "{{ExpiredToken}}"
 					}
 				},
 				"method": "POST",
@@ -191,7 +191,7 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "a2f1a01e78e7bca",
+						"value": "Bearer {{ExpiredToken}}",
 						"type": "text"
 					}
 				],
@@ -271,6 +271,67 @@
 				}
 			],
 			"id": "da212890-5f9b-46c8-9243-2d2ae12c32e5",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"password": "password123",
+						"username": "admin"
+					}
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Cookie",
+						"value": "token={{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"firstname\": \"Michael\",\r\n  \"lastname\": \"Smith\",\r\n  \"totalprice\": 700,\r\n  \"depositpaid\": false,\r\n  \"bookingdates\": {\r\n    \"checkin\": \"2024-02-01\",\r\n    \"checkout\": \"2024-02-15\"\r\n  },\r\n  \"additionalneeds\": \"Lunch\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{baseURL}}/booking/{{bookingId}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Booking Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "dd29edd8-de8b-4cf1-9a70-8418c9e4d50d",
+						"exec": [
+							"pm.test(\"Booking updated\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var data = pm.response.json();\r",
+							"pm.test(\"First name updated\", function () {\r",
+							"    pm.expect(data.firstname).to.eql(\"Michael\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "f117c9cc-e2bf-4588-95b9-2b8ec02df9b6",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
