@@ -6,45 +6,6 @@
 	},
 	"item": [
 		{
-			"name": "Get Booking",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "035d15cb-66c1-4570-93fe-9d0873865b34",
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});\r",
-							"\r",
-							"var data = pm.response.json();\r",
-							"\r",
-							"pm.test(\"First name matches created booking\", function () {\r",
-							"    pm.expect(data.firstname).to.eql(pm.environment.get(\"firstName\"));\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Booking ID exists\", function () {\r",
-							"    pm.expect(pm.environment.get(\"bookingId\")).to.not.be.undefined;\r",
-							"});"
-						],
-						"type": "text/javascript",
-						"packages": {},
-						"requests": {}
-					}
-				}
-			],
-			"id": "7eed9b34-7273-4c02-95f3-ac04f1db90c2",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": "{{baseURL}}/booking/{{bookingId}}"
-			},
-			"response": []
-		},
-		{
 			"name": "Auth",
 			"event": [
 				{
@@ -128,6 +89,37 @@
 							"pm.test(\"Booking ID is stored\", function () {\r",
 							"    pm.expect(pm.environment.get(\"bookingId\")).to.not.be.null;\r",
 							"});\r",
+							"\r",
+							"// Parse request body to compare with response\r",
+							"var requestBody = JSON.parse(pm.request.body.raw);\r",
+							"\r",
+							"pm.test(\"Response firstname matches request\", function () {\r",
+							"    pm.expect(responseData.booking.firstname).to.eql(requestBody.firstname);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response lastname matches request\", function () {\r",
+							"    pm.expect(responseData.booking.lastname).to.eql(requestBody.lastname);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response totalprice matches request\", function () {\r",
+							"    pm.expect(responseData.booking.totalprice).to.eql(requestBody.totalprice);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response depositpaid matches request\", function () {\r",
+							"    pm.expect(responseData.booking.depositpaid).to.eql(requestBody.depositpaid);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response checkin date matches request\", function () {\r",
+							"    pm.expect(responseData.booking.bookingdates.checkin).to.eql(requestBody.bookingdates.checkin);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response checkout date matches request\", function () {\r",
+							"    pm.expect(responseData.booking.bookingdates.checkout).to.eql(requestBody.bookingdates.checkout);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response additionalneeds matches request\", function () {\r",
+							"    pm.expect(responseData.booking.additionalneeds).to.eql(requestBody.additionalneeds);\r",
+							"});\r",
 							""
 						],
 						"type": "text/javascript",
@@ -159,6 +151,129 @@
 					}
 				},
 				"url": "{{baseURL}}/booking"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Booking with Expired Auth",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e8fad0f5-0e18-480c-b41a-21e6936d2190",
+						"exec": [
+							"pm.test(\"Booking created successfully\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var responseData = pm.response.json();\r",
+							"pm.environment.set(\"bookingId\", responseData.bookingid);\r",
+							"pm.environment.set(\"firstName\", responseData.booking.firstname);\r",
+							"\r",
+							"pm.test(\"Booking ID is stored\", function () {\r",
+							"    pm.expect(pm.environment.get(\"bookingId\")).to.not.be.null;\r",
+							"});\r",
+							"\r",
+							"// Parse request body to compare with response\r",
+							"var requestBody = JSON.parse(pm.request.body.raw);\r",
+							"\r",
+							"pm.test(\"Response firstname matches request\", function () {\r",
+							"    pm.expect(responseData.booking.firstname).to.eql(requestBody.firstname);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response lastname matches request\", function () {\r",
+							"    pm.expect(responseData.booking.lastname).to.eql(requestBody.lastname);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response totalprice matches request\", function () {\r",
+							"    pm.expect(responseData.booking.totalprice).to.eql(requestBody.totalprice);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response depositpaid matches request\", function () {\r",
+							"    pm.expect(responseData.booking.depositpaid).to.eql(requestBody.depositpaid);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response checkin date matches request\", function () {\r",
+							"    pm.expect(responseData.booking.bookingdates.checkin).to.eql(requestBody.bookingdates.checkin);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response checkout date matches request\", function () {\r",
+							"    pm.expect(responseData.booking.bookingdates.checkout).to.eql(requestBody.bookingdates.checkout);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response additionalneeds matches request\", function () {\r",
+							"    pm.expect(responseData.booking.additionalneeds).to.eql(requestBody.additionalneeds);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "b5b53b7a-ca95-4747-9aef-3c71afdb251a",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"firstname\": \"John\",\r\n  \"lastname\": \"Smith\",\r\n  \"totalprice\": 500,\r\n  \"depositpaid\": true,\r\n  \"bookingdates\": {\r\n    \"checkin\": \"2024-01-01\",\r\n    \"checkout\": \"2024-01-10\"\r\n  },\r\n  \"additionalneeds\": \"Breakfast\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{baseURL}}/booking"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Booking",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "035d15cb-66c1-4570-93fe-9d0873865b34",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var data = pm.response.json();\r",
+							"\r",
+							"pm.test(\"First name matches created booking\", function () {\r",
+							"    pm.expect(data.firstname).to.eql(pm.environment.get(\"firstName\"));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Booking ID exists\", function () {\r",
+							"    pm.expect(pm.environment.get(\"bookingId\")).to.not.be.undefined;\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "7eed9b34-7273-4c02-95f3-ac04f1db90c2",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseURL}}/booking/{{bookingId}}"
 			},
 			"response": []
 		},
