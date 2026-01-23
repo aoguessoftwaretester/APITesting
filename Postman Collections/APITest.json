@@ -162,7 +162,7 @@
 					"script": {
 						"id": "e8fad0f5-0e18-480c-b41a-21e6936d2190",
 						"exec": [
-							"pm.environment.set(\"token\", \"a2f1a01e78e7bca\");\r",
+							"pm.environment.set(\"ExpiredToken\", \"a2f1a01e78e7bca\");\r",
 							""
 						],
 						"type": "text/javascript",
@@ -187,6 +187,11 @@
 					{
 						"key": "Content-Type",
 						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "a2f1a01e78e7bca",
 						"type": "text"
 					}
 				],
