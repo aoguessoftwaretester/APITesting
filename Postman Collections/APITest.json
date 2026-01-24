@@ -71,7 +71,7 @@
 			"response": []
 		},
 		{
-			"name": "Create Booking",
+			"name": "Create Booking 1",
 			"event": [
 				{
 					"listen": "test",
