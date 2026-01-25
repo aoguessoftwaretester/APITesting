@@ -102,7 +102,7 @@
 							"var requestBody = JSON.parse(pm.request.body.raw);\r",
 							"\r",
 							"pm.test(\"Response firstname matches request\", function () {\r",
-							"    pm.expect(responseData.booking.firstname1).to.eql(requestBody.firstname);\r",
+							"    pm.expect(responseData.booking.firstname).to.eql(requestBody.firstname);\r",
 							"});\r",
 							"\r",
 							"pm.test(\"Response lastname matches request\", function () {\r",
@@ -259,11 +259,11 @@
 							"});\r",
 							"\r",
 							"var responseData = pm.response.json();\r",
-							"pm.environment.set(\"bookingId\", responseData.bookingid);\r",
-							"pm.environment.set(\"firstName\", responseData.booking.firstname);\r",
+							"pm.environment.set(\"bookingId3\", responseData.bookingid);\r",
+							"pm.environment.set(\"firstName3\", responseData.booking.firstname);\r",
 							"\r",
 							"pm.test(\"Booking ID is stored\", function () {\r",
-							"    pm.expect(pm.environment.get(\"bookingId\")).to.not.be.null;\r",
+							"    pm.expect(pm.environment.get(\"bookingId3\")).to.not.be.null;\r",
 							"});\r",
 							"\r",
 							"// Parse request body to compare with response\r",
@@ -319,7 +319,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"firstname\": \"John\",\r\n  \"lastname\": \"Smith\",\r\n  \"totalprice\": 500,\r\n  \"depositpaid\": true,\r\n  \"bookingdates\": {\r\n    \"checkin\": \"2024-01-01\",\r\n    \"checkout\": \"2024-01-10\"\r\n  },\r\n  \"additionalneeds\": \"Breakfast\"\r\n}",
+					"raw": "{\r\n  \"firstname\": \"Vanessa\",\r\n  \"lastname\": \"Peters\",\r\n  \"totalprice\": 650,\r\n  \"depositpaid\": true,\r\n  \"bookingdates\": {\r\n    \"checkin\": \"2024-03-01\",\r\n    \"checkout\": \"2024-03-10\"\r\n  },\r\n  \"additionalneeds\": \"Extra Mattress\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -403,7 +403,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"firstname\": \"John\",\r\n  \"lastname\": \"Smith\",\r\n  \"totalprice\": 500,\r\n  \"depositpaid\": true,\r\n  \"bookingdates\": {\r\n    \"checkin\": \"2024-01-01\",\r\n    \"checkout\": \"2024-01-10\"\r\n  },\r\n  \"additionalneeds\": \"Breakfast\"\r\n}",
+					"raw": "{\r\n  \"firstname\": \"Leila\",\r\n  \"lastname\": \"Ryan\",\r\n  \"totalprice\": 450,\r\n  \"depositpaid\": true,\r\n  \"bookingdates\": {\r\n    \"checkin\": \"2024-04-01\",\r\n    \"checkout\": \"2024-04-10\"\r\n  },\r\n  \"additionalneeds\": \"Breakfast\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
