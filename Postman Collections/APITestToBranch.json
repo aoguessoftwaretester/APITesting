@@ -415,7 +415,7 @@
 			"response": []
 		},
 		{
-			"name": "Get Booking",
+			"name": "Get Booking per bookingID",
 			"event": [
 				{
 					"listen": "test",
@@ -487,6 +487,43 @@
 						"packages": {},
 						"requests": {}
 					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "38e44298-98e3-41d7-88df-ba2a6863f3d7",
+						"exec": [
+							"const baseURL = pm.environment.get(\"baseURL\");",
+							"const bookingIds = [",
+							"    pm.environment.get(\"bookingId1\"),",
+							"    pm.environment.get(\"bookingId2\"),",
+							"    pm.environment.get(\"bookingId3\"),",
+							"    pm.environment.get(\"bookingId4\")",
+							"].filter(id => id !== undefined && id !== null && id !== \"\");",
+							"",
+							"const allBookings = [];",
+							"",
+							"for (const id of bookingIds) {",
+							"    try {",
+							"        const response = await pm.sendRequest({",
+							"            url: `${baseURL}/booking/${id}`,",
+							"            method: 'GET'",
+							"        });",
+							"        allBookings.push({ bookingId: id, data: response.json() });",
+							"        console.log(`Fetched booking ${id}:`, response.json());",
+							"    } catch (err) {",
+							"        console.error(`Error fetching booking ${id}:`, err);",
+							"        allBookings.push({ bookingId: id, error: err.message });",
+							"    }",
+							"}",
+							"",
+							"pm.variables.set(\"allBookings\", JSON.stringify(allBookings));",
+							"console.log(\"All bookings consolidated:\", allBookings);"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
 				}
 			],
 			"id": "fc1c1853-61e2-422c-9ea5-a4e6a3e962d4",
@@ -496,7 +533,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": "{{baseURL}}/booking/{{bookingId1}}"
+				"url": "{{baseURL}}/booking"
 			},
 			"response": []
 		},
