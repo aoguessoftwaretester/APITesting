@@ -573,7 +573,7 @@
 						}
 					}
 				},
-				"url": "{{baseURL}}/booking/{{bookingId}}"
+				"url": "{{baseURL}}/booking/{{bookingId1}}"
 			},
 			"response": []
 		},
@@ -615,7 +615,7 @@
 						"type": "text"
 					}
 				],
-				"url": "{{baseURL}}/booking/{{bookingId}}"
+				"url": "{{baseURL}}/booking/{{bookingId1}}"
 			},
 			"response": []
 		}
