@@ -18,7 +18,15 @@
 							"});\r",
 							"\r",
 							"var jsonData = pm.response.json();\r",
-							"pm.environment.set(\"token\", jsonData.token);\r",
+							"pm.test(\"Token is present\", function()\r",
+							"{\r",
+							"    pm.expect(jsonData.token).to.exist;\r",
+							"});\r",
+							"\r",
+							"if (jsonData.token)\r",
+							"{\r",
+							"  pm.environment.set(\"token\", jsonData.token);\r",
+							"}\r",
 							"\r",
 							"pm.test(\"Token is generated\", function () {\r",
 							"    pm.expect(jsonData.token).to.not.be.undefined;\r",
@@ -83,11 +91,11 @@
 							"});\r",
 							"\r",
 							"var responseData = pm.response.json();\r",
-							"pm.environment.set(\"bookingId\", responseData.bookingid);\r",
-							"pm.environment.set(\"firstName\", responseData.booking.firstname);\r",
+							"pm.environment.set(\"bookingId1\", responseData.bookingid);\r",
+							"pm.environment.set(\"firstName1\", responseData.booking.firstname);\r",
 							"\r",
 							"pm.test(\"Booking ID is stored\", function () {\r",
-							"    pm.expect(pm.environment.get(\"bookingId\")).to.not.be.null;\r",
+							"    pm.expect(pm.environment.get(\"bookingId1\")).to.not.be.null;\r",
 							"});\r",
 							"\r",
 							"// Parse request body to compare with response\r",
@@ -155,7 +163,259 @@
 			"response": []
 		},
 		{
-			"name": "Get Booking",
+			"name": "Create Booking 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e8fad0f5-0e18-480c-b41a-21e6936d2190",
+						"exec": [
+							"pm.test(\"Booking created successfully\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var responseData = pm.response.json();\r",
+							"pm.environment.set(\"bookingId2\", responseData.bookingid);\r",
+							"pm.environment.set(\"firstName2\", responseData.booking.firstname);\r",
+							"\r",
+							"pm.test(\"Booking ID is stored\", function () {\r",
+							"    pm.expect(pm.environment.get(\"bookingId2\")).to.not.be.null;\r",
+							"});\r",
+							"\r",
+							"// Parse request body to compare with response\r",
+							"var requestBody = JSON.parse(pm.request.body.raw);\r",
+							"\r",
+							"pm.test(\"Response firstname matches request\", function () {\r",
+							"    pm.expect(responseData.booking.firstname).to.eql(requestBody.firstname);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response lastname matches request\", function () {\r",
+							"    pm.expect(responseData.booking.lastname).to.eql(requestBody.lastname);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response totalprice matches request\", function () {\r",
+							"    pm.expect(responseData.booking.totalprice).to.eql(requestBody.totalprice);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response depositpaid matches request\", function () {\r",
+							"    pm.expect(responseData.booking.depositpaid).to.eql(requestBody.depositpaid);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response checkin date matches request\", function () {\r",
+							"    pm.expect(responseData.booking.bookingdates.checkin).to.eql(requestBody.bookingdates.checkin);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response checkout date matches request\", function () {\r",
+							"    pm.expect(responseData.booking.bookingdates.checkout).to.eql(requestBody.bookingdates.checkout);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response additionalneeds matches request\", function () {\r",
+							"    pm.expect(responseData.booking.additionalneeds).to.eql(requestBody.additionalneeds);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "c9fc2ffc-7f4d-4a1a-9c4b-45bb3d514cdb",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"firstname\": \"Jane\",\r\n  \"lastname\": \"Doe\",\r\n  \"totalprice\": 400,\r\n  \"depositpaid\": true,\r\n  \"bookingdates\": {\r\n    \"checkin\": \"2024-02-01\",\r\n    \"checkout\": \"2024-02-10\"\r\n  },\r\n  \"additionalneeds\": \"Parking\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{baseURL}}/booking"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Booking 3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e8fad0f5-0e18-480c-b41a-21e6936d2190",
+						"exec": [
+							"pm.test(\"Booking created successfully\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var responseData = pm.response.json();\r",
+							"pm.environment.set(\"bookingId3\", responseData.bookingid);\r",
+							"pm.environment.set(\"firstName3\", responseData.booking.firstname);\r",
+							"\r",
+							"pm.test(\"Booking ID is stored\", function () {\r",
+							"    pm.expect(pm.environment.get(\"bookingId3\")).to.not.be.null;\r",
+							"});\r",
+							"\r",
+							"// Parse request body to compare with response\r",
+							"var requestBody = JSON.parse(pm.request.body.raw);\r",
+							"\r",
+							"pm.test(\"Response firstname matches request\", function () {\r",
+							"    pm.expect(responseData.booking.firstname).to.eql(requestBody.firstname);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response lastname matches request\", function () {\r",
+							"    pm.expect(responseData.booking.lastname).to.eql(requestBody.lastname);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response totalprice matches request\", function () {\r",
+							"    pm.expect(responseData.booking.totalprice).to.eql(requestBody.totalprice);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response depositpaid matches request\", function () {\r",
+							"    pm.expect(responseData.booking.depositpaid).to.eql(requestBody.depositpaid);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response checkin date matches request\", function () {\r",
+							"    pm.expect(responseData.booking.bookingdates.checkin).to.eql(requestBody.bookingdates.checkin);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response checkout date matches request\", function () {\r",
+							"    pm.expect(responseData.booking.bookingdates.checkout).to.eql(requestBody.bookingdates.checkout);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response additionalneeds matches request\", function () {\r",
+							"    pm.expect(responseData.booking.additionalneeds).to.eql(requestBody.additionalneeds);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "eed067b6-4542-44e4-ad31-4c34d5a0dfbf",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"firstname\": \"Vanessa\",\r\n  \"lastname\": \"Peters\",\r\n  \"totalprice\": 650,\r\n  \"depositpaid\": true,\r\n  \"bookingdates\": {\r\n    \"checkin\": \"2024-03-01\",\r\n    \"checkout\": \"2024-03-10\"\r\n  },\r\n  \"additionalneeds\": \"Extra Mattress\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{baseURL}}/booking"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Booking 4",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e8fad0f5-0e18-480c-b41a-21e6936d2190",
+						"exec": [
+							"pm.test(\"Booking created successfully\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var responseData = pm.response.json();\r",
+							"pm.environment.set(\"bookingId4\", responseData.bookingid);\r",
+							"pm.environment.set(\"firstName4\", responseData.booking.firstname);\r",
+							"\r",
+							"pm.test(\"Booking ID is stored\", function () {\r",
+							"    pm.expect(pm.environment.get(\"bookingId4\")).to.not.be.null;\r",
+							"});\r",
+							"\r",
+							"// Parse request body to compare with response\r",
+							"var requestBody = JSON.parse(pm.request.body.raw);\r",
+							"\r",
+							"pm.test(\"Response firstname matches request\", function () {\r",
+							"    pm.expect(responseData.booking.firstname).to.eql(requestBody.firstname);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response lastname matches request\", function () {\r",
+							"    pm.expect(responseData.booking.lastname).to.eql(requestBody.lastname);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response totalprice matches request\", function () {\r",
+							"    pm.expect(responseData.booking.totalprice).to.eql(requestBody.totalprice);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response depositpaid matches request\", function () {\r",
+							"    pm.expect(responseData.booking.depositpaid).to.eql(requestBody.depositpaid);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response checkin date matches request\", function () {\r",
+							"    pm.expect(responseData.booking.bookingdates.checkin).to.eql(requestBody.bookingdates.checkin);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response checkout date matches request\", function () {\r",
+							"    pm.expect(responseData.booking.bookingdates.checkout).to.eql(requestBody.bookingdates.checkout);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response additionalneeds matches request\", function () {\r",
+							"    pm.expect(responseData.booking.additionalneeds).to.eql(requestBody.additionalneeds);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "55f67322-656a-40ea-9b83-373a7f6a1fc5",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"firstname\": \"Leila\",\r\n  \"lastname\": \"Ryan\",\r\n  \"totalprice\": 450,\r\n  \"depositpaid\": true,\r\n  \"bookingdates\": {\r\n    \"checkin\": \"2024-04-01\",\r\n    \"checkout\": \"2024-04-10\"\r\n  },\r\n  \"additionalneeds\": \"Breakfast\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{baseURL}}/booking"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Booking per bookingID",
 			"event": [
 				{
 					"listen": "test",
@@ -168,13 +428,17 @@
 							"\r",
 							"var data = pm.response.json();\r",
 							"\r",
-							"pm.test(\"First name matches created booking\", function () {\r",
-							"    pm.expect(data.firstname).to.eql(pm.environment.get(\"firstName\"));\r",
+							"pm.test(\"Booking ID exists\", function () {\r",
+							"    pm.expect(pm.environment.get(\"bookingId1\")).to.not.be.undefined;\r",
 							"});\r",
 							"\r",
-							"pm.test(\"Booking ID exists\", function () {\r",
-							"    pm.expect(pm.environment.get(\"bookingId\")).to.not.be.undefined;\r",
-							"});"
+							"pm.test(\"First name matches created booking\", function () {\r",
+							"    pm.expect(data.firstname).to.eql(pm.environment.get(\"firstName1\"));\r",
+							"});\r",
+							"\r",
+							"//pm.test(\"Last name matches created booking\", function () {\r",
+							"//    pm.expect(data.lastname).to.eql(pm.environment.get(\"lastName1\"));\r",
+							"//});"
 						],
 						"type": "text/javascript",
 						"packages": {},
@@ -189,7 +453,87 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": "{{baseURL}}/booking/{{bookingId}}"
+				"url": "{{baseURL}}/booking/{{bookingId1}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Booking",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "035d15cb-66c1-4570-93fe-9d0873865b34",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var data = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Booking ID exists\", function () {\r",
+							"    pm.expect(pm.environment.get(\"bookingId1\")).to.not.be.undefined;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"First name matches created booking\", function () {\r",
+							"    pm.expect(data.firstname).to.eql(pm.environment.get(\"firstName1\"));\r",
+							"});\r",
+							"\r",
+							"//pm.test(\"Last name matches created booking\", function () {\r",
+							"//    pm.expect(data.lastname).to.eql(pm.environment.get(\"lastName1\"));\r",
+							"//});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "38e44298-98e3-41d7-88df-ba2a6863f3d7",
+						"exec": [
+							"const baseURL = pm.environment.get(\"baseURL\");",
+							"const bookingIds = [",
+							"    pm.environment.get(\"bookingId1\"),",
+							"    pm.environment.get(\"bookingId2\"),",
+							"    pm.environment.get(\"bookingId3\"),",
+							"    pm.environment.get(\"bookingId4\")",
+							"].filter(id => id !== undefined && id !== null && id !== \"\");",
+							"",
+							"const allBookings = [];",
+							"",
+							"for (const id of bookingIds) {",
+							"    try {",
+							"        const response = await pm.sendRequest({",
+							"            url: `${baseURL}/booking/${id}`,",
+							"            method: 'GET'",
+							"        });",
+							"        allBookings.push({ bookingId: id, data: response.json() });",
+							"        console.log(`Fetched booking ${id}:`, response.json());",
+							"    } catch (err) {",
+							"        console.error(`Error fetching booking ${id}:`, err);",
+							"        allBookings.push({ bookingId: id, error: err.message });",
+							"    }",
+							"}",
+							"",
+							"pm.variables.set(\"allBookings\", JSON.stringify(allBookings));",
+							"console.log(\"All bookings consolidated:\", allBookings);"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "fc1c1853-61e2-422c-9ea5-a4e6a3e962d4",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseURL}}/booking"
 			},
 			"response": []
 		},
@@ -201,11 +545,11 @@
 					"script": {
 						"id": "dd29edd8-de8b-4cf1-9a70-8418c9e4d50d",
 						"exec": [
-							"pm.test(\"Status code is 403 Forbidden\", function () {",
+							"pm.test(\"Status code is 403\", function () {",
 							"    pm.expect(pm.response.code).to.eql(403);",
 							"});",
 							"",
-							"pm.test(\"Check if the response body contains 'Forbidden'\", function () {",
+							"pm.test(\"The response body contains 'Forbidden'\", function () {",
 							"    pm.expect(pm.response.text()).to.include(\"Forbidden\");",
 							"});"
 						],
@@ -309,7 +653,7 @@
 						}
 					}
 				},
-				"url": "{{baseURL}}/booking/{{bookingId}}"
+				"url": "{{baseURL}}/booking/{{bookingId1}}"
 			},
 			"response": []
 		},
@@ -351,7 +695,7 @@
 						"type": "text"
 					}
 				],
-				"url": "{{baseURL}}/booking/{{bookingId}}"
+				"url": "{{baseURL}}/booking/{{bookingId1}}"
 			},
 			"response": []
 		}
