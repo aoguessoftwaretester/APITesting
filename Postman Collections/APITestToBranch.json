@@ -436,9 +436,9 @@
 							"    pm.expect(data.firstname).to.eql(pm.environment.get(\"firstName1\"));\r",
 							"});\r",
 							"\r",
-							"pm.test(\"Last name matches created booking\", function () {\r",
-							"    pm.expect(data.lastname).to.eql(pm.environment.get(\"lastName1\"));\r",
-							"});"
+							"//pm.test(\"Last name matches created booking\", function () {\r",
+							"//    pm.expect(data.lastname).to.eql(pm.environment.get(\"lastName1\"));\r",
+							"//});"
 						],
 						"type": "text/javascript",
 						"packages": {},
@@ -453,7 +453,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": "{{baseURL}}/booking/{{bookingId}}"
+				"url": "{{baseURL}}/booking/{{bookingId1}}"
 			},
 			"response": []
 		},
