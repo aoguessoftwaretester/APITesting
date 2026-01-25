@@ -458,6 +458,49 @@
 			"response": []
 		},
 		{
+			"name": "Get Booking Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "035d15cb-66c1-4570-93fe-9d0873865b34",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var data = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Booking ID exists\", function () {\r",
+							"    pm.expect(pm.environment.get(\"bookingId1\")).to.not.be.undefined;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"First name matches created booking\", function () {\r",
+							"    pm.expect(data.firstname).to.eql(pm.environment.get(\"firstName1\"));\r",
+							"});\r",
+							"\r",
+							"//pm.test(\"Last name matches created booking\", function () {\r",
+							"//    pm.expect(data.lastname).to.eql(pm.environment.get(\"lastName1\"));\r",
+							"//});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "fc1c1853-61e2-422c-9ea5-a4e6a3e962d4",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseURL}}/booking/{{bookingId1}}"
+			},
+			"response": []
+		},
+		{
 			"name": "Update Booking with Invalid Token",
 			"event": [
 				{
@@ -465,11 +508,11 @@
 					"script": {
 						"id": "dd29edd8-de8b-4cf1-9a70-8418c9e4d50d",
 						"exec": [
-							"pm.test(\"Status code is 403 Forbidden\", function () {",
+							"pm.test(\"Status code is 403\", function () {",
 							"    pm.expect(pm.response.code).to.eql(403);",
 							"});",
 							"",
-							"pm.test(\"Check if the response body contains 'Forbidden'\", function () {",
+							"pm.test(\"The response body contains 'Forbidden'\", function () {",
 							"    pm.expect(pm.response.text()).to.include(\"Forbidden\");",
 							"});"
 						],
