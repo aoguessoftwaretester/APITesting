@@ -458,7 +458,7 @@
 			"response": []
 		},
 		{
-			"name": "Get Booking Copy",
+			"name": "Get All Booking",
 			"event": [
 				{
 					"listen": "test",
