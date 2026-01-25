@@ -1,0 +1,37 @@
+name: Postman API Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+      - master
+
+jobs:
+  postman-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install Newman
+        run: npm install -g newman
+
+      - name: Run Postman Collection
+        run: |
+          newman run https://api.postman.com/collections/51446413-2257e266-0b88-4cea-9938-282714099ef9?apikey=${{ secrets.POSTMAN_API_KEY }} \
+            --environment https://api.postman.com/environments/51446413-5b810cc7-e2a9-48e2-a2fb-345ac1cdc185?apikey=${{ secrets.POSTMAN_API_KEY }} \
+            --reporters cli,junit \
+            --reporter-junit-export results.xml
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: postman-test-results
+          path: results.xml
