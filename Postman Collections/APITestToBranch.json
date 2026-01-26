@@ -74,7 +74,7 @@
 						}
 					}
 				},
-				"url": "{{baseURL}}/auth"
+				"url": "{{baseUrl}}/auth"
 			},
 			"response": []
 		},
@@ -158,7 +158,7 @@
 						}
 					}
 				},
-				"url": "{{baseURL}}/booking"
+				"url": "{{baseUrl}}/booking"
 			},
 			"response": []
 		},
@@ -242,7 +242,7 @@
 						}
 					}
 				},
-				"url": "{{baseURL}}/booking"
+				"url": "{{baseUrl}}/booking"
 			},
 			"response": []
 		},
@@ -326,7 +326,7 @@
 						}
 					}
 				},
-				"url": "{{baseURL}}/booking"
+				"url": "{{baseUrl}}/booking"
 			},
 			"response": []
 		},
@@ -410,7 +410,7 @@
 						}
 					}
 				},
-				"url": "{{baseURL}}/booking"
+				"url": "{{baseUrl}}/booking"
 			},
 			"response": []
 		},
@@ -453,7 +453,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": "{{baseURL}}/booking/{{bookingId1}}"
+				"url": "{{baseUrl}}/booking/{{bookingId1}}"
 			},
 			"response": []
 		},
@@ -537,7 +537,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": "{{baseURL}}/booking"
+				"url": "{{baseUrl}}/booking"
 			},
 			"response": []
 		},
@@ -596,7 +596,7 @@
 						}
 					}
 				},
-				"url": "{{baseURL}}/booking/{{bookingId}}"
+				"url": "{{baseUrl}}/booking/{{bookingId}}"
 			},
 			"response": []
 		},
@@ -657,7 +657,7 @@
 						}
 					}
 				},
-				"url": "{{baseURL}}/booking/{{bookingId1}}"
+				"url": "{{baseUrl}}/booking/{{bookingId1}}"
 			},
 			"response": []
 		},
@@ -699,7 +699,7 @@
 						"type": "text"
 					}
 				],
-				"url": "{{baseURL}}/booking/{{bookingId1}}"
+				"url": "{{baseUrl}}/booking/{{bookingId1}}"
 			},
 			"response": []
 		}
