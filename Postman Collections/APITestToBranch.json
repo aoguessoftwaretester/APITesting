@@ -588,6 +588,128 @@
 			"response": []
 		},
 		{
+			"name": "Get All Booking Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "035d15cb-66c1-4570-93fe-9d0873865b34",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Get the consolidated bookings from pre-request script",
+							"var allBookingsStr = pm.variables.get(\"allBookings\");",
+							"var allBookings = [];",
+							"",
+							"if (allBookingsStr) {",
+							"    try {",
+							"        allBookings = JSON.parse(allBookingsStr);",
+							"    } catch (e) {",
+							"        console.error(\"Failed to parse allBookings:\", e);",
+							"    }",
+							"}",
+							"",
+							"pm.test(\"All bookings were fetched successfully\", function () {",
+							"    pm.expect(allBookings.length).to.be.greaterThan(0);",
+							"    console.log(\"Total bookings fetched:\", allBookings.length);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "38e44298-98e3-41d7-88df-ba2a6863f3d7",
+						"exec": [
+							"const baseUrl = pm.environment.get(\"baseUrl\");",
+							"const bookingIds = [",
+							"    pm.environment.get(\"bookingId1\"),",
+							"    pm.environment.get(\"bookingId2\"),",
+							"    pm.environment.get(\"bookingId3\"),",
+							"    pm.environment.get(\"bookingId4\")",
+							"].filter(id => id !== undefined && id !== null && id !== \"\"); // removes invalid values from the array",
+							"",
+							"const allBookings = [];",
+							"let completedRequests = 0;",
+							"",
+							"// Function to fetch a single booking",
+							"function fetchBooking(id, callback) {",
+							"    pm.sendRequest({",
+							"        url: `${baseUrl}/booking/${id}`,",
+							"        method: 'GET'",
+							"    }, function (err, response) {",
+							"        if (err) {",
+							"            console.error(`Error fetching booking ${id}:`, err);",
+							"            allBookings.push({ bookingId: id, error: err.message });",
+							"        } else {",
+							"            allBookings.push({ bookingId: id, data: response.json() });",
+							"            console.log(`Fetched booking ${id}:`, response.json());",
+							"        }",
+							"        completedRequests++;",
+							"        if (completedRequests === bookingIds.length) {",
+							"            callback();",
+							"        }",
+							"    });",
+							"}",
+							"",
+							"// Fetch all bookings sequentially using callbacks",
+							"if (bookingIds.length > 0) {",
+							"    let index = 0;",
+							"    ",
+							"    function fetchNext() {",
+							"        if (index < bookingIds.length) {",
+							"            const id = bookingIds[index];",
+							"            pm.sendRequest({",
+							"                url: `${baseUrl}/booking/${id}`,",
+							"                method: 'GET'",
+							"            }, function (err, response) {",
+							"                if (err) {",
+							"                    console.error(`Error fetching booking ${id}:`, err);",
+							"                    allBookings.push({ bookingId: id, error: err.message });",
+							"                } else {",
+							"                    allBookings.push({ bookingId: id, data: response.json() });",
+							"                    console.log(`Fetched booking ${id}:`, response.json());",
+							"                }",
+							"                index++;",
+							"                fetchNext();",
+							"            });",
+							"        } else {",
+							"            // All requests completed",
+							"            pm.variables.set(\"allBookings\", JSON.stringify(allBookings));",
+							"            console.log(\"All bookings consolidated:\", allBookings);",
+							"        }",
+							"    }",
+							"    ",
+							"    fetchNext();",
+							"} else {",
+							"    console.log(\"No booking IDs found in environment variables\");",
+							"    pm.variables.set(\"allBookings\", JSON.stringify([]));",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "27ba6ea1-6ede-4bdc-ac0a-bd5c4ef14fc2",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseUrl}}/booking"
+			},
+			"response": []
+		},
+		{
 			"name": "Update Booking with Invalid Token",
 			"event": [
 				{
