@@ -93,6 +93,7 @@
 							"var responseData = pm.response.json();\r",
 							"pm.environment.set(\"bookingId1\", responseData.bookingid);\r",
 							"pm.environment.set(\"firstName1\", responseData.booking.firstname);\r",
+							"pm.environment.set(\"lastName1\", responseData.booking.lastname);\r",
 							"\r",
 							"pm.test(\"Booking ID is stored\", function () {\r",
 							"    pm.expect(pm.environment.get(\"bookingId1\")).to.not.be.null;\r",
@@ -436,13 +437,20 @@
 							"    pm.expect(data.firstname).to.eql(pm.environment.get(\"firstName1\"));\r",
 							"});\r",
 							"\r",
-							"//pm.test(\"Last name matches created booking\", function () {\r",
-							"//    pm.expect(data.lastname).to.eql(pm.environment.get(\"lastName1\"));\r",
-							"//});"
+							"pm.test(\"Last name matches created booking\", function () {\r",
+							"    pm.expect(data.lastname).to.eql(pm.environment.get(\"lastName1\"));\r",
+							"});"
 						],
 						"type": "text/javascript",
 						"packages": {},
 						"requests": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"packages": {},
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -503,7 +511,7 @@
 							"    pm.environment.get(\"bookingId2\"),",
 							"    pm.environment.get(\"bookingId3\"),",
 							"    pm.environment.get(\"bookingId4\")",
-							"].filter(id => id !== undefined && id !== null && id !== \"\");",
+							"].filter(id => id !== undefined && id !== null && id !== \"\"); // removes invalid values from the array",
 							"",
 							"const allBookings = [];",
 							"let completedRequests = 0;",
