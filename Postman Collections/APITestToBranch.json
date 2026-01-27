@@ -93,6 +93,7 @@
 							"var responseData = pm.response.json();\r",
 							"pm.environment.set(\"bookingId1\", responseData.bookingid);\r",
 							"pm.environment.set(\"firstName1\", responseData.booking.firstname);\r",
+							"pm.environment.set(\"lastName1\", responseData.booking.lastname);\r",
 							"\r",
 							"pm.test(\"Booking ID is stored\", function () {\r",
 							"    pm.expect(pm.environment.get(\"bookingId1\")).to.not.be.null;\r",
@@ -436,13 +437,20 @@
 							"    pm.expect(data.firstname).to.eql(pm.environment.get(\"firstName1\"));\r",
 							"});\r",
 							"\r",
-							"//pm.test(\"Last name matches created booking\", function () {\r",
-							"//    pm.expect(data.lastname).to.eql(pm.environment.get(\"lastName1\"));\r",
-							"//});"
+							"pm.test(\"Last name matches created booking\", function () {\r",
+							"    pm.expect(data.lastname).to.eql(pm.environment.get(\"lastName1\"));\r",
+							"});"
 						],
 						"type": "text/javascript",
 						"packages": {},
 						"requests": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"packages": {},
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -463,10 +471,29 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "035d15cb-66c1-4570-93fe-9d0873865b34",
+						"type": "text/javascript",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Verify all bookings in the main response have a bookingid",
+							"var responseData = pm.response.json();",
+							"",
+							"pm.test(\"Response is an array\", function () {",
+							"    pm.expect(responseData).to.be.an(\"array\");",
+							"});",
+							"",
+							"pm.test(\"All bookings in response have a bookingid\", function () {",
+							"    responseData.forEach(function(booking, index) {",
+							"        pm.expect(booking, \"Booking at index \" + index + \" should have bookingid\").to.have.property(\"bookingid\");",
+							"        pm.expect(booking.bookingid, \"Booking ID at index \" + index + \" should be a number\").to.be.a(\"number\");",
+							"        pm.expect(booking.bookingid, \"Booking ID at index \" + index + \" should be greater than 0\").to.be.above(0);",
+							"    });",
+							"});",
+							"",
+							"pm.test(\"Total bookings count: \" + responseData.length, function () {",
+							"    pm.expect(responseData.length).to.be.above(0);",
 							"});",
 							"",
 							"// Get the consolidated bookings from pre-request script",
@@ -481,15 +508,86 @@
 							"    }",
 							"}",
 							"",
-							"pm.test(\"All bookings were fetched successfully\", function () {",
+							"pm.test(\"All fetched bookings were retrieved successfully\", function () {",
 							"    pm.expect(allBookings.length).to.be.greaterThan(0);",
 							"    console.log(\"Total bookings fetched:\", allBookings.length);",
 							"});",
-							""
-						],
-						"type": "text/javascript",
-						"packages": {},
-						"requests": {}
+							"",
+							"// Verify all fetched bookings have valid booking IDs",
+							"pm.test(\"All fetched bookings have valid booking IDs\", function () {",
+							"    allBookings.forEach(function(booking) {",
+							"        pm.expect(booking, \"Booking should have bookingId property\").to.have.property(\"bookingId\");",
+							"        pm.expect(booking.bookingId, \"Booking ID should not be null or undefined\").to.not.be.oneOf([null, undefined, \"\"]);",
+							"    });",
+							"});",
+							"",
+							"// Test each booking against environment variables",
+							"var envMappings = [",
+							"    { idVar: \"bookingId1\", firstNameVar: \"firstName1\", lastNameVar: \"lastName1\" },",
+							"    { idVar: \"bookingId2\", firstNameVar: \"firstName2\", lastNameVar: \"lastName2\" },",
+							"    { idVar: \"bookingId3\", firstNameVar: \"firstName3\", lastNameVar: \"lastName3\" },",
+							"    { idVar: \"bookingId4\", firstNameVar: \"firstName4\", lastNameVar: \"lastName4\" }",
+							"];",
+							"",
+							"allBookings.forEach(function(booking, index) {",
+							"    var mapping = envMappings[index];",
+							"    ",
+							"    if (booking.error) {",
+							"        pm.test(\"Booking \" + booking.bookingId + \" - fetch failed\", function () {",
+							"            pm.expect.fail(\"Error fetching booking: \" + booking.error);",
+							"        });",
+							"        return;",
+							"    }",
+							"    ",
+							"    var data = booking.data;",
+							"    var bookingId = booking.bookingId;",
+							"    ",
+							"    pm.test(\"Booking \" + bookingId + \" - has valid data structure\", function () {",
+							"        pm.expect(data).to.have.property(\"firstname\");",
+							"        pm.expect(data).to.have.property(\"lastname\");",
+							"        pm.expect(data).to.have.property(\"totalprice\");",
+							"        pm.expect(data).to.have.property(\"depositpaid\");",
+							"        pm.expect(data).to.have.property(\"bookingdates\");",
+							"    });",
+							"    ",
+							"    // Check firstname if environment variable exists",
+							"    var expectedFirstName = pm.environment.get(mapping.firstNameVar);",
+							"    if (expectedFirstName !== undefined && expectedFirstName !== null && expectedFirstName !== \"\") {",
+							"        pm.test(\"Booking \" + bookingId + \" - firstname matches '\" + expectedFirstName + \"'\", function () {",
+							"            pm.expect(data.firstname).to.eql(expectedFirstName);",
+							"        });",
+							"    }",
+							"    ",
+							"    // Check lastname if environment variable exists",
+							"    var expectedLastName = pm.environment.get(mapping.lastNameVar);",
+							"    if (expectedLastName !== undefined && expectedLastName !== null && expectedLastName !== \"\") {",
+							"        pm.test(\"Booking \" + bookingId + \" - lastname matches '\" + expectedLastName + \"'\", function () {",
+							"            pm.expect(data.lastname).to.eql(expectedLastName);",
+							"        });",
+							"    }",
+							"    ",
+							"    // Validate data types",
+							"    pm.test(\"Booking \" + bookingId + \" - totalprice is a number\", function () {",
+							"        pm.expect(data.totalprice).to.be.a(\"number\");",
+							"    });",
+							"    ",
+							"    pm.test(\"Booking \" + bookingId + \" - depositpaid is a boolean\", function () {",
+							"        pm.expect(data.depositpaid).to.be.a(\"boolean\");",
+							"    });",
+							"    ",
+							"    pm.test(\"Booking \" + bookingId + \" - bookingdates has checkin and checkout\", function () {",
+							"        pm.expect(data.bookingdates).to.have.property(\"checkin\");",
+							"        pm.expect(data.bookingdates).to.have.property(\"checkout\");",
+							"    });",
+							"});",
+							"",
+							"// Summary",
+							"pm.test(\"Summary - All \" + allBookings.length + \" bookings validated\", function () {",
+							"    var successCount = allBookings.filter(b => !b.error).length;",
+							"    console.log(\"Successfully fetched and validated \" + successCount + \" out of \" + allBookings.length + \" bookings\");",
+							"    pm.expect(successCount).to.eql(allBookings.length);",
+							"});"
+						]
 					}
 				},
 				{
@@ -503,7 +601,7 @@
 							"    pm.environment.get(\"bookingId2\"),",
 							"    pm.environment.get(\"bookingId3\"),",
 							"    pm.environment.get(\"bookingId4\")",
-							"].filter(id => id !== undefined && id !== null && id !== \"\");",
+							"].filter(id => id !== undefined && id !== null && id !== \"\"); // removes invalid values from the array",
 							"",
 							"const allBookings = [];",
 							"let completedRequests = 0;",
@@ -700,7 +798,7 @@
 			"response": []
 		},
 		{
-			"name": "Delete Booking",
+			"name": "Delete Booking 1",
 			"event": [
 				{
 					"listen": "test",
@@ -738,6 +836,132 @@
 					}
 				],
 				"url": "{{baseUrl}}/booking/{{bookingId1}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Booking 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d8fcb21d-c3be-4bdc-892e-e72b215fbf5d",
+						"exec": [
+							"pm.test(\"Booking deleted successfully\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "e93fe959-a90e-4c9d-bb56-ea21c15dd2c8",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"password": "password123",
+						"username": "admin"
+					}
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "token={{token}}",
+						"type": "text"
+					}
+				],
+				"url": "{{baseUrl}}/booking/{{bookingId2}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Booking 3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d8fcb21d-c3be-4bdc-892e-e72b215fbf5d",
+						"exec": [
+							"pm.test(\"Booking deleted successfully\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "33abd615-e12f-42a2-94d8-3b865167cb19",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"password": "password123",
+						"username": "admin"
+					}
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "token={{token}}",
+						"type": "text"
+					}
+				],
+				"url": "{{baseUrl}}/booking/{{bookingId3}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Booking 4",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d8fcb21d-c3be-4bdc-892e-e72b215fbf5d",
+						"exec": [
+							"pm.test(\"Booking deleted successfully\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "9783b9af-b133-4a3c-ba62-68ae717c8f9b",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"password": "password123",
+						"username": "admin"
+					}
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "token={{token}}",
+						"type": "text"
+					}
+				],
+				"url": "{{baseUrl}}/booking/{{bookingId4}}"
 			},
 			"response": []
 		}
