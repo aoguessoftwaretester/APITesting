@@ -960,6 +960,48 @@
 				"url": "{{baseUrl}}/booking/{{bookingId1}}"
 			},
 			"response": []
+		},
+		{
+			"name": "Delete All Booking",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d8fcb21d-c3be-4bdc-892e-e72b215fbf5d",
+						"exec": [
+							"pm.test(\"Booking deleted successfully\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"id": "a3ef08af-46dc-4207-9a6b-436a7e5b9a19",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"password": "password123",
+						"username": "admin"
+					}
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "token={{token}}",
+						"type": "text"
+					}
+				],
+				"url": "{{baseUrl}}/booking/{{bookingId1}}"
+			},
+			"response": []
 		}
 	]
 }
